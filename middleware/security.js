@@ -1,16 +1,12 @@
 const xss = require(`xss`);
 
 exports.sanitiseHTMLStrings = (req, res, next) => {
-    const keysToNotCheck = [`images`, `video`];
+    const keysToNotCheck = [];
 
     if(req.body && Object.keys(req.body).length){
         for(let key in req.body){
-            for(let i=0; i < (keysToNotCheck.length - 1); i++){
-                if(key.toLowerCase() === keysToNotCheck[i].toLowerCase()){
-                    break;
-                }
-                req.body[key] = req.body[key].split(`"`).join(`'`);
-            }
+            if(keysToNotCheck.includes(key.toLowerCase())) break;
+            else req.body[key] = req.body[key].split(`"`).join(`'`);
         }
     }
     next();
